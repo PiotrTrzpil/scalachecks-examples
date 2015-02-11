@@ -19,11 +19,12 @@ object ListSpec extends Properties("List") {
          val pivot = Test.partition(ar)
          val list = ar.toList
 
-         (pivot >= 0) ==> {
-            val (left, right) = list.splitAt(pivot)
-            left.forall(_ <= list(pivot)) && right.forall(_ >= list(pivot))
+         Prop(list.forall(a.contains(_)) ) && {
+            (pivot >= 0) ==> {
+               val (left, right) = list.splitAt(pivot)
+               left.forall(_ <= list(pivot)) && right.forall(_ >= list(pivot))
+            }
          }
-
       }
    }
 }
@@ -33,6 +34,7 @@ object Test {
       println("QUICKSORT on: "+input)
       def loop(input: Array[Int]) : Unit= {
          val pivot = partition(input)
+         println("after partition: "+input.toList+" pivot: "+pivot)
          if (pivot >= 0) {
             loop(input.slice(0, pivot))
             loop(input.slice(pivot, input.length))
