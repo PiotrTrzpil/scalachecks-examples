@@ -1,6 +1,6 @@
 package scalacheck
 
-import org.scalacheck.Properties
+import org.scalacheck.{Arbitrary, Gen, Properties}
 import org.scalacheck.Prop._
 
 
@@ -20,7 +20,31 @@ object ListTests extends Properties("List") {
    }
 }
 
+
+object SortedListTests extends Properties("SortedList") {
+
+   implicit val gen = Arbitrary(for {
+     list  <- Arbitrary.arbitrary[List[Int]]
+      ordering <- Gen.oneOf(true, false)
+   } yield new SortedList(list, ordering))
+
+   property("sorted") = forAll { (list: SortedList) =>
+      (list.data.size > 1) ==> {
+         if(list.ascending) {
+            list.data
+              .sliding(2)
+              .forall(a=>a(0)<=a(1))
+         } else {
+            list.data
+              .sliding(2)
+              .forall(a=>a(0)>=a(1))
+         }
+     }
+   }
+
+}
+
 class SortedList(list:List[Int], val ascending:Boolean) {
-   val data = list.sorted
+   val data = list.sorted(if(ascending) Ordering.Int else Ordering.Int.reverse)
 }
 
