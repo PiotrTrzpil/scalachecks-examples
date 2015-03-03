@@ -3,6 +3,7 @@ package scalacheck
 import org.scalacheck.{Arbitrary, Gen, Properties}
 import org.scalacheck.Prop._
 import org.scalacheck._
+import org.scalacheck.Gen.Choose
 
 object ListTests extends Properties("List") {
 
@@ -39,6 +40,7 @@ object SortedListTests extends Properties("SortedList") {
       ordering <- Gen.oneOf(true, false)
    } yield new SortedList(list, ordering)
 
+
 //   implicit val arbSorted = Arbitrary {
 //
 //   }
@@ -57,9 +59,43 @@ object SortedListTests extends Properties("SortedList") {
      }
    }
 
+
 }
 
 class SortedList(list:List[Int], val ascending:Boolean) {
    val data = list.sorted(if(ascending) Ordering.Int else Ordering.Int.reverse)
 }
 
+
+
+object VectTests extends Properties("Vect") {
+
+   case class Vect(x: Double, y: Double) {
+      def length = math.sqrt(x*x+y*y)
+   }
+
+   implicit val choose = new Choose[Vect] {
+      def choose(low: Vect, high: Vect) =
+         for {
+            x <- Gen.choose(low.x, high.x)
+            y <- Gen.choose(low.y, high.y)
+         } yield Vect(x, y)
+   }
+
+   val smallVectors = Gen.choose(Vect(0, 0), Vect(3, 4))
+
+   property("vect length") = forAll(smallVectors) { (v: Vect) =>
+      v.length < 5
+   }
+
+   val allVectors = for {
+      x <- Gen.choose(Double.MinValue, Double.MaxValue)
+      y <- Gen.choose(Double.MinValue, Double.MaxValue)
+   } yield Vect(x, y)
+
+   implicit val arbVector = Arbitrary(allVectors)
+
+   property("vect length") = forAll { (v: Vect) =>
+      passed
+   }
+}
