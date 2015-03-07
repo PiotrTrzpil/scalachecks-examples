@@ -22,6 +22,11 @@ object ListTests extends Properties("List") {
          (a ++ b).size == a.size + b.size
       }
 
+   property("can be empty") =
+     exists { (a: List[Int]) =>
+        a.size == 0
+     }
+
    property("head") = forAll { (list: List[Int]) =>
       val propHead = (list.size > 0) ==> (list.headOption != None)
       val propFalse = Prop.falsified

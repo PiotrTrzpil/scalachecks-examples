@@ -1,32 +1,30 @@
 package scalacheck
 
-import org.scalacheck.{Gen, Properties}
+import org.scalacheck.{Arbitrary, Gen, Properties}
 
 object Generators extends Properties("Generators") {
 
-   // Numbers
-
-  // Gen.chooseNum()
-
-   val fromRangeGen = Gen.choose(5, 10)
-
-
-
-   // Collections
-
- //  Gen.pick()
-
    // Special
 
-   val constantValueGen = Gen.const("value")
+   Gen.const("value")
 
    Gen.fail
 
    // Generator composition
 
+   Gen.zip(Gen.alphaChar, Gen.alphaChar)
+
+   Gen.option(Gen.alphaChar)
+
+   Gen.frequency(10 -> Gen.choose(1, 10),
+      20 -> Gen.choose(11, 100),
+      70 -> Gen.choose(101, 1000))
 
 
-   Gen.option()
+   // Collections
 
-   Gen.wrap()
+   Gen.pick(3, List(1,5,6,3))
+
+   Gen.mapOf(Gen.zip(Gen.alphaStr, Arbitrary.arbInt))
+
 }

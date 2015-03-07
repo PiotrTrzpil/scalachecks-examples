@@ -11,23 +11,10 @@ class SortedList(list:List[Int], val ascending:Boolean) {
 
 object SortedListTests extends Properties("SortedList") {
 
-   val ints = Arbitrary.arbitrary[Int]
-
-   val listsLargerThanOne = Gen.nonEmptyListOf(ints)
-     .map(_ :+ ints.sample.get)
-
-   val listsLargerThanOne_2 = Gen.zip(Gen.nonEmptyListOf(ints), ints)
-     .map { case (list, elem) => list :+ elem}
-
    val genSorted = for {
-      list  <- listsLargerThanOne_2//Arbitrary.arbitrary[List[Int]]
+      data  <- Arbitrary.arbitrary[List[Int]]
       ordering <- Gen.oneOf(true, false)
-   } yield new SortedList(list, ordering)
-
-   def increaseSize[T](amount:Int)(gen:Gen[T]) =
-      Gen.parameterized { p =>
-         p.withSize(p.size + amount)
-      }
+   } yield new SortedList(data, ordering)
 
    property("sorted") = forAll(genSorted) { (list: SortedList) =>
       (list.data.size > 1) ==> {
