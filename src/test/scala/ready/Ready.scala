@@ -18,7 +18,7 @@ object Ready extends Properties("SortedList") {
      .map { case (list, elem) => list :+ elem}
 
    val genSorted = for {
-      list  <- listsLargerThanOne_2//Arbitrary.arbitrary[List[Int]]
+      list  <- listsLargerThanOne_2
       ordering <- Gen.oneOf(true, false)
    } yield new SortedList(list, ordering)
 

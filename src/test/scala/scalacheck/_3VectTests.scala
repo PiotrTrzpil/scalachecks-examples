@@ -11,8 +11,8 @@ object VectTests extends Properties("Vect") {
       def length = math.sqrt(x*x+y*y)
    }
 
-   property("vect length") = forAll { (v: Vect) =>
-      v.length >= 0
-   }
+//   property("vect length") = forAll { (v: Vect) =>
+//      v.length >= 0
+//   }
 
 }
