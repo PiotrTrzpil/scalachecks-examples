@@ -5,30 +5,30 @@ import org.scalacheck.Prop.propBoolean
 import scala.util.Random
 import org.scalacheck._
 object ListSpec extends Properties("List") {
-
-   property("list") = forAll { (a: List[Int]) =>
-      (a.size > 4) ==>{
-        val sorted = Test.quicksort(a)
-         Prop(sorted.forall(a.contains(_)) ) && {
-            sorted.sliding(2).filter(_.size > 1).forall(l => l(0) < l(1))
-         }
-     }
-   }
-
-   property("partition") = forAll { (a: List[Int]) =>
-      (a.size > 4 ) ==> {
-         val ar = a.toArray
-         val pivot = Test.partition(ar)
-         val list = ar.toList
-
-         Prop(list.forall(a.contains(_)) ) && {
-            (pivot >= 0) ==> {
-               val (left, right) = list.splitAt(pivot)
-               left.forall(_ <= list(pivot)) && right.forall(_ >= list(pivot))
-            }
-         }
-      }
-   }
+//
+//   property("list") = forAll { (a: List[Int]) =>
+//      (a.size > 4) ==>{
+//        val sorted = Test.quicksort(a)
+//         Prop(sorted.forall(a.contains(_)) ) && {
+//            sorted.sliding(2).filter(_.size > 1).forall(l => l(0) < l(1))
+//         }
+//     }
+//   }
+//
+//   property("partition") = forAll { (a: List[Int]) =>
+//      (a.size > 4 ) ==> {
+//         val ar = a.toArray
+//         val pivot = Test.partition(ar)
+//         val list = ar.toList
+//
+//         Prop(list.forall(a.contains(_)) ) && {
+//            (pivot >= 0) ==> {
+//               val (left, right) = list.splitAt(pivot)
+//               left.forall(_ <= list(pivot)) && right.forall(_ >= list(pivot))
+//            }
+//         }
+//      }
+//   }
 }
 
 object Test {

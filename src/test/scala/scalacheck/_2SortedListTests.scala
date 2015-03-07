@@ -4,17 +4,30 @@ import org.scalacheck.{Gen, Arbitrary, Properties}
 import org.scalacheck.Prop._
 
 
+class SortedList(list:List[Int], val ascending:Boolean) {
+   val data = list.sorted(if(ascending) Ordering.Int else Ordering.Int.reverse)
+}
+
+
 object SortedListTests extends Properties("SortedList") {
 
+   val ints = Arbitrary.arbitrary[Int]
+
+   val listsLargerThanOne = Gen.nonEmptyListOf(ints)
+     .map(_ :+ ints.sample.get)
+
+   val listsLargerThanOne_2 = Gen.zip(Gen.nonEmptyListOf(ints), ints)
+     .map { case (list, elem) => list :+ elem}
+
    val genSorted = for {
-      list  <- Arbitrary.arbitrary[List[Int]]
+      list  <- listsLargerThanOne_2//Arbitrary.arbitrary[List[Int]]
       ordering <- Gen.oneOf(true, false)
    } yield new SortedList(list, ordering)
 
-
-   //   implicit val arbSorted = Arbitrary {
-   //
-   //   }
+   def increaseSize[T](amount:Int)(gen:Gen[T]) =
+      Gen.parameterized { p =>
+         p.withSize(p.size + amount)
+      }
 
    property("sorted") = forAll(genSorted) { (list: SortedList) =>
       (list.data.size > 1) ==> {
@@ -29,10 +42,4 @@ object SortedListTests extends Properties("SortedList") {
          }
       }
    }
-
-
-}
-
-class SortedList(list:List[Int], val ascending:Boolean) {
-   val data = list.sorted(if(ascending) Ordering.Int else Ordering.Int.reverse)
 }

@@ -19,28 +19,27 @@ object VectTests extends Properties("Vect") {
          } yield Vect(x, y)
    }
 
-   val smallVectors = Gen.choose(Vect(0, 0), Vect(3, 4))
+   val smallVectors = Gen.choose(Vect(0, 0), Vect(5, 5))
 
-   property("vect length") = forAll(smallVectors) { (v: Vect) =>
-      v.length < 5
-   }
+//   property("vect length") = forAll(smallVectors) { (v: Vect) =>
+//      v.length < 5
+//   }
 
-   val allVectors = for {
-      x <- Gen.choose(0d, Double.MaxValue)
-      y <- Gen.choose(0d, Double.MaxValue)
-   } yield Vect(x, y)
 
-   implicit val arbVector = Arbitrary(allVectors)
+   implicit val arbVector = Arbitrary(smallVectors)
 
-   property("vect length") = forAll(smallVectors) { (v: Vect) =>
-      v.length >= 0
-   }
+//   property("vect length") = forAll { (v: Vect) =>
+//      v.length >= 0
+//   }
 
-   property("collect example") = forAll { (v: Vect) =>
-     collect(v) {
-        v.length >= 0
-     }
-   }
+
+//   property("collect example") = forAll { (v: Vect) =>
+//     classify(v.length < 5, "small", "large") {
+//        collect(v, v.length) {
+//           v.length >= 0
+//        }
+//     }
+//   }
 
 
 }

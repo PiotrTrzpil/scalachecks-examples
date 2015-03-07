@@ -8,7 +8,7 @@ object Generators extends Properties("Generators") {
 
   // Gen.chooseNum()
 
-   Gen.choose(5, 10)
+   val fromRangeGen = Gen.choose(5, 10)
 
 
 
@@ -18,7 +18,7 @@ object Generators extends Properties("Generators") {
 
    // Special
 
-   Gen.const()
+   val constantValueGen = Gen.const("value")
 
    Gen.fail
 
